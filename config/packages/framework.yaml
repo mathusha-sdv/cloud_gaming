@@ -16,7 +16,12 @@ framework:
     #fragments: true
     php_errors:
         log: true
-
+    http_client:
+        scoped_clients:
+            azure_login:
+                base_uri: 'https://login.microsoftonline.com'
+            azure_api:
+                base_uri: https://management.azure.com
 when@test:
     framework:
         test: true

@@ -1,0 +1,41 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+      
+ <section class="projects-section bg-light" id="projects">
+
+            {% for game in games %}
+                {% if loop.index %2 == 0 %}
+                    {% set div_class = 'row gx-0 justify-content-center' %}
+                    {%  set div_order='' %}
+                {% else %}
+                     {% set div_class = 'row gx-0 mb-5 mb-lg-0 justify-content-center' %}
+                     {%  set div_order="order-lg-first" %}
+                {% endif %}
+            
+              
+            <div class="container px-4 px-lg-5">
+            <div class="{{div_class}}">
+                    <div class="col-lg-6 bg-dark"><img class="img-middle img-fluid" src="/img/{{game.img}} ?>" alt="..." /></div>
+                    <div class="col-lg-6 {{div_order}}">
+                        <div class="bg-black text-center h-100 project">
+                            <div class="d-flex h-100">
+                                <div class="project-text w-100 my-auto text-center">
+                                    <h4 class="text-white">{{game.name}}</h4>
+                                    <p class="mb-0 text-white-50">{{game.description}}</p>
+                                    {#<form action="" method="post">
+                                        <input type="hidden" id="gameID" value="{{game.id}}">
+                                        <button type="submit" class="btn btn-danger">Jouer</button>
+                                    </form>#}
+                                    <a href="{{ path('game', {'id': game.id}) }}">Jouer</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                {% endfor %}
+          
+        </section>
+
+{% endblock %}

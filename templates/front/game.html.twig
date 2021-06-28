@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% set const = constant('App\\Client\\AzureClient::ACTION_START') %}
+
+{% block body %}
+    <div height="100%" class="row-full">
+    <iframe height="100%" width="100%" src="{{ game.link }}"></iframe>
+    </div>
+    
+     <div class="bg-dark row-full div-cover text-light text-center">
+         <h1>{{ game.name }}</h1>
+         <div class="bg-dark"><img class="rounded mx-auto d-block" src="/img/{{game.img}} ?>" alt="..." /></div>
+         <a href="{{ path('game_action', {'id': game.id, 'action':const }) }}" id="launch-game">Lancer le jeu </a>
+    </div>
+{% endblock %}
