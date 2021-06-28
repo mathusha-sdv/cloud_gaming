@@ -67,6 +67,9 @@ class AzureClient {
         if($response->getStatusCode() >= 400) {
             throw new Exception('Erreur' . $response->getContent());
         }
+        else{
+            return true;
+        }
        // https://management.azure.com/subscriptions/bb8f88c1-0d2d-4e9c-a732-3ecadfdeed9a/resourceGroups/NetworkWatcherRG/providers/Microsoft.Web/sites/UnityTourellle/stop?api-version=2019-08-01
     }
     

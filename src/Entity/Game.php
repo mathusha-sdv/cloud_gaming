@@ -36,6 +36,11 @@ class Game
      * @ORM\Column(type="string", length=200)
      */
     private $link;
+    
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $vm_name;
 
     public function getId(): ?int
     {
@@ -86,6 +91,18 @@ class Game
     public function setLink(string $link): self
     {
         $this->link = $link;
+
+        return $this;
+    }
+    
+    public function getVmName(): ?string
+    {
+        return $this->vm_name;
+    }
+
+    public function setVmName(string $vm_name): self
+    {
+        $this->vm_name = $vm_name;
 
         return $this;
     }
