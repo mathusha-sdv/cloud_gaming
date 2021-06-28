@@ -1,0 +1,20 @@
+{% extends "base.html.twig" %}
+
+
+{% block body %}
+    {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+            {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+           {% set const = constant('App\\Client\\AzureClient::ACTION_STOP') %}
+            <div height="100%" class="row-full" id="div-game">
+                 <a href="{{ path('game_action', {'id': game.id, 'action':const }) }}" id="stop-game">Arreter le jeu ! </a>
+            <iframe height="100%" width="100%" src="{{ game.link }}"></iframe>
+            </div>
+{% endblock %}

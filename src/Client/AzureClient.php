@@ -77,4 +77,8 @@ class AzureClient {
     {
         $this->executeAction('start');
     }
+    public function stopServer()
+    {
+        $this->executeAction('stop');
+    }
 }

@@ -32,16 +32,25 @@ class DefaultController  extends AbstractController{
     /**
          * @Route("/game/{id}", name="game")
      */
-    public function game($id,$status=null, \App\Client\AzureClient $azureClient){
+    public function game($id,$status=null, \App\Client\AzureClient $azureClient,AuthorizationCheckerInterface $authChecker){
+        
         $game = $this->getDoctrine()
             ->getRepository(Game::class)
             ->find($id);
-        $show_game = 0;
-        if($status==1 && $status !=null){
-            $show_game = 1;
+        if (true === $authChecker->isGranted('ROLE_USER')){
+            if($status==1){
+               $this->addFlash('success', 'Jeu en cours de chargement ');
+           }
+           elseif($status != null){
+               $this->addFlash('error', 'Vous n\'avez pas accès à ce jeu ! ');
+           }
         }
+        else{
+            $this->addFlash('error', 'Connectez vous pour avoir accès aux jeux');
+        }
+
          
-        return $this->render('front/game.html.twig',["game"=>$game,"show_game"=>$show_game]);
+        return $this->render('front/game.html.twig',["game"=>$game]);
     }
     
      /**
@@ -49,19 +58,42 @@ class DefaultController  extends AbstractController{
      */
     public function gameAction($id, $action, \App\Client\AzureClient $azureClient,AuthorizationCheckerInterface $authChecker)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $status='';
-        if (true === $authChecker->isGranted('ROLE_USER')) {
-            $status =$azureClient->executeAction($action);
+        dump($action);
+        $status=0;
+        if($action == 'stop'){
+            
+            $azureClient->stopServer();
+            $response = $this->forward('App\Controller\DefaultController::game', [
+        'id'  => $id                      
+    ]);
+            return $response;
         }
-
-        //return $this->redirectToRoute('game',['id'=>$id]);
-        $response = $this->forward('App\Controller\DefaultController::game', [
-        'id'  => $id,
-        'status' => $status,
+        if (true === $authChecker->isGranted('ROLE_USER')) {
+            $user = $this->getUser();
+            if($user->getHasAccess() == 1){
+                        $response = $this->forward('App\Controller\DefaultController::gamePlay', [
+        'id'  => $id                      
     ]);
         return $response;
+            }
+        }
+        
     }
+    
+         /**
+         * @Route("/game/{id}/play", name="game_play")
+     */
+     public function gamePlay($id, \App\Client\AzureClient $azureClient,AuthorizationCheckerInterface $authChecker)
+    {
+                 $game = $this->getDoctrine()
+            ->getRepository(Game::class)
+            ->find($id);
+                $azureClient->startServer();
+               return $this->render('front/gamePlay.html.twig',["id"=>$id,"game"=>$game]);
+            
+    }
+
+    
     
     
 }

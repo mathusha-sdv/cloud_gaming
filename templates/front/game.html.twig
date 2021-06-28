@@ -1,21 +1,23 @@
 {% extends "base.html.twig" %}
 
-{% set const = constant('App\\Client\\AzureClient::ACTION_START') %}
 
 {% block body %}
-        {% if show_game == 1 %}
-           
-            <div height="100%" class="row-full">
-            <iframe height="100%" width="100%" src="{{ game.link }}"></iframe>
+    {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
             </div>
-        {% else %}
-        
+        {% endfor %}
+            {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% set const = constant('App\\Client\\AzureClient::ACTION_START') %}
      <div class="bg-dark row-full text-light text-center" >
          <h1>{{ game.name }}</h1>
          <div class="bg-dark"><img class="rounded mx-auto d-block" src="/img/{{game.img}} ?>" alt="..." /></div>
-         <a href="{{ path('game_action', {'id': game.id, 'action':const }) }}" id="launch-game">Lancer le jeu </a>
+         <a href="{{ path('game_play', {'id': game.id }) }}" id="launch-game">Lancer le jeu </a>
     </div>
-        {% endif %}
 
-         <input id="show_game" type="hidden" value="{{ show_game }}">
 {% endblock %}
