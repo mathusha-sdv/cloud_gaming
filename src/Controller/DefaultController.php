@@ -38,10 +38,11 @@ class DefaultController  extends AbstractController{
             ->getRepository(Game::class)
             ->find($id);
         if (true === $authChecker->isGranted('ROLE_USER')){
-            if($status==1){
-               $this->addFlash('success', 'Jeu en cours de chargement ');
+            $user = $this->getUser();
+            if($user->getHasAccess() == 1){
+               $this->addFlash('success', 'Accès au jeu');
            }
-           elseif($status != null){
+           else{
                $this->addFlash('error', 'Vous n\'avez pas accès à ce jeu ! ');
            }
         }
@@ -77,7 +78,7 @@ class DefaultController  extends AbstractController{
         return $response;
             }
         }
-        
+         return $this->redirectToRoute('game',['id'=>$id]);
     }
     
          /**
